@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStageBan } from '../context/StageBanContext';
 import { DEFAULT_RULESETS } from '../data/rulesets';
 import { STAGES } from '../data/stages';
-import { Ruleset, DsrType } from '../types/smash';
+import type { Ruleset, DsrType } from '../types/smash';
 import { X, Check } from 'lucide-react';
 
 interface RulesetModalProps {
