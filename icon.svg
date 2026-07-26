@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="shield" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+  
+  <!-- Outer Shield -->
+  <path d="M 256,70 C 350,70 410,120 410,240 C 410,360 290,430 256,450 C 222,430 102,360 102,240 C 102,120 162,70 256,70 Z" 
+        fill="url(#shield)" filter="url(#glow)" />
+        
+  <!-- Inner Cross Lines (Smash Logo Motif) -->
+  <circle cx="256" cy="250" r="120" fill="none" stroke="#ffffff" stroke-width="24" opacity="0.95" />
+  <line x1="136" y1="210" x2="376" y2="210" stroke="#ffffff" stroke-width="24" opacity="0.95" />
+  <line x1="220" y1="130" x2="220" y2="370" stroke="#ffffff" stroke-width="24" opacity="0.95" />
+</svg>
