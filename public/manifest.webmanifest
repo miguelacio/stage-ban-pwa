@@ -1,0 +1,18 @@
+{
+  "name": "Super Smash Bros Ultimate Stage Ban PWA",
+  "short_name": "Smash Ban",
+  "description": "Tournament stage striking, counterpicking, and match score tracker for SSBU.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
