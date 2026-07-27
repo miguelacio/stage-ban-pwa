@@ -1,32 +1,44 @@
-# React + TypeScript + Vite
+# Super Smash Bros. Ultimate Stage Striking & Banning PWA ⚔️
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A sleek, mobile-optimized Progressive Web Application (PWA) designed for competitive Super Smash Bros. Ultimate tournament players and organizers to easily manage stage striking, counterpicking, score tracking, and Dave's Stupid Rule (DSR) enforcement.
 
-Currently, two official plugins are available:
+👉 **Live Application**: [https://miguelacio.github.io/stage-ban-pwa/](https://miguelacio.github.io/stage-ban-pwa/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌟 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **1-2-1 Game 1 Striking Sequence**:
+  1. **RPS Winner Selection**: Winner chooses who bans first.
+  2. **First Ban**: First player bans **1** starter stage.
+  3. **Second Bans**: Opponent bans **2** starter stages.
+  4. **Final Choice**: First player picks the final starting stage directly from the **2 remaining options**.
+* **Bilingual Support (English 🇺🇸 / Español 🇪🇸)**:
+  * Instant one-click language toggle right in the header bar or settings menu.
+* **Game 2+ Counterpicking & DSR Support**:
+  * Winner bans stages (configurable count, e.g. 3 bans).
+  * Loser picks next stage with automatic Dave's Stupid Rule (Modified or Full DSR) enforcement.
+* **Scoreboard & Match History**:
+  * Live set score tracking (Best of 3 / Best of 5) and game log breakdown.
+* **Tactile Mobile Audio Feedback**:
+  * Synthesized Web Audio chimes for bans, picks, turns, and victory fanfare.
+* **Progressive Web App (PWA)**:
+  * Installable on iOS & Android Home Screens, runs offline.
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🚀 Tech Stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+* **Framework**: React 19 + TypeScript
+* **Bundler**: Vite 8
+* **Styling**: Vanilla CSS (Responsive Mobile-first Design System)
+* **PWA**: `vite-plugin-pwa` + Workbox
+* **Icons**: `lucide-react`
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## 📜 Disclaimer & Legal Notice
+
+> **Smash Ban PWA** is an unofficial, non-commercial fan project created solely for esports tournament utility and community management. 
+>
+> It is **not** affiliated with, endorsed by, or sponsored by **Nintendo Co., Ltd.**, HAL Laboratory, Sora Ltd., or Bandai Namco. All product names, logos, trademarks, and registered trademarks regarding *Super Smash Bros. Ultimate* belong to their respective owners.
