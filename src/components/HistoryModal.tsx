@@ -57,6 +57,13 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose }) =
                       {winnerName} ({game.p1ScoreAfter}-{game.p2ScoreAfter})
                     </div>
                   </div>
+                  {(game.p1Character || game.p2Character) && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', gap: '12px', marginTop: '2px' }}>
+                      <span><strong style={{ color: 'var(--color-p1)' }}>{settings.p1Name}:</strong> {game.p1Character || 'N/A'}</span>
+                      <span>vs</span>
+                      <span><strong style={{ color: 'var(--color-p2)' }}>{settings.p2Name}:</strong> {game.p2Character || 'N/A'}</span>
+                    </div>
+                  )}
                 </div>
               );
             })}

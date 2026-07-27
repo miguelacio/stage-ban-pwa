@@ -90,6 +90,17 @@ export interface Translations {
   winnerLabel: string;
   bansLabel: string;
   noBans: string;
+
+  // Character Selection Modal
+  charSelectModalTitle: string;
+  charSelectStep1Loser: (name: string) => string;
+  charSelectStep2Winner: (name: string) => string;
+  charSelectGameWinner: (name: string) => string;
+  charSelectGameLoser: (name: string) => string;
+  charSearchPlaceholder: string;
+  keepCharacterBtn: (name: string, char: string) => string;
+  confirmCharChoice: (char: string) => string;
+  selectCharPrompt: (name: string) => string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -183,6 +194,17 @@ export const translations: Record<Language, Translations> = {
     winnerLabel: 'Winner',
     bansLabel: 'Bans',
     noBans: 'None',
+
+    // Character Selection Modal
+    charSelectModalTitle: 'Character Selection',
+    charSelectStep1Loser: (name) => `Game 1: ${name} (RPS Loser) selects character first`,
+    charSelectStep2Winner: (name) => `Game 1: ${name} (RPS Winner) selects character second`,
+    charSelectGameWinner: (name) => `Game 2+: ${name} (Game Winner) decides character first`,
+    charSelectGameLoser: (name) => `Game 2+: ${name} (Game Loser) decides character second`,
+    charSearchPlaceholder: 'Search character name...',
+    keepCharacterBtn: (name, char) => `${name}: Keep ${char}`,
+    confirmCharChoice: (char) => `Select ${char}`,
+    selectCharPrompt: (name) => `${name}'s Turn to Select Character`,
   },
   es: {
     // Header
@@ -274,5 +296,16 @@ export const translations: Record<Language, Translations> = {
     winnerLabel: 'Ganador',
     bansLabel: 'Bans',
     noBans: 'Ninguno',
+
+    // Character Selection Modal
+    charSelectModalTitle: 'Selección de Personaje',
+    charSelectStep1Loser: (name) => `Juego 1: ${name} (Perdedor de PPT) elige personaje primero`,
+    charSelectStep2Winner: (name) => `Juego 1: ${name} (Ganador de PPT) elige personaje segundo`,
+    charSelectGameWinner: (name) => `Juego 2+: ${name} (Ganador del Juego) decide personaje primero`,
+    charSelectGameLoser: (name) => `Juego 2+: ${name} (Perdedor del Juego) decide personaje segundo`,
+    charSearchPlaceholder: 'Buscar nombre de personaje...',
+    keepCharacterBtn: (name, char) => `${name}: Mantener a ${char}`,
+    confirmCharChoice: (char) => `Elegir a ${char}`,
+    selectCharPrompt: (name) => `Turno de ${name} para elegir personaje`,
   },
 };

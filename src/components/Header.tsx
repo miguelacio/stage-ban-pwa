@@ -17,7 +17,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
     resetSet,
     undoLastAction,
     t,
-    toggleLanguage
+    toggleLanguage,
+    p1Character,
+    p2Character,
   } = useStageBan();
 
   const [isEditingNames, setIsEditingNames] = useState(false);
@@ -81,7 +83,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
       <div className="scoreboard">
         <div className="player-card p1" onClick={() => setIsEditingNames(true)} style={{ cursor: 'pointer' }}>
           <div className="player-avatar p1">P1</div>
-          <div className="player-name" title={settings.p1Name}>{settings.p1Name}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', overflow: 'hidden' }}>
+            <div className="player-name" title={settings.p1Name}>{settings.p1Name}</div>
+            {p1Character && <div style={{ fontSize: '0.7rem', color: 'var(--color-p1)', fontWeight: 700 }}>{p1Character}</div>}
+          </div>
         </div>
 
         <div className="score-display">
@@ -92,8 +97,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
         </div>
 
         <div className="player-card p2" onClick={() => setIsEditingNames(true)} style={{ cursor: 'pointer' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', overflow: 'hidden' }}>
+            <div className="player-name" title={settings.p2Name}>{settings.p2Name}</div>
+            {p2Character && <div style={{ fontSize: '0.7rem', color: 'var(--color-p2)', fontWeight: 700 }}>{p2Character}</div>}
+          </div>
           <div className="player-avatar p2">P2</div>
-          <div className="player-name" title={settings.p2Name}>{settings.p2Name}</div>
         </div>
       </div>
 

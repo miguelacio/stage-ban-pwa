@@ -9,6 +9,8 @@ import { RulesetModal } from './components/RulesetModal';
 import { HistoryModal } from './components/HistoryModal';
 import { BottomDock } from './components/BottomDock';
 
+import { CharacterSelectModal } from './components/CharacterSelectModal';
+
 export const MainApp: React.FC = () => {
   const [isRulesetOpen, setIsRulesetOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -30,6 +32,7 @@ export const MainApp: React.FC = () => {
 
       {/* Modals */}
       <RpsModal />
+      <CharacterSelectModal />
       <WinnerModal />
       <RulesetModal isOpen={isRulesetOpen} onClose={() => setIsRulesetOpen(false)} />
       <HistoryModal isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />

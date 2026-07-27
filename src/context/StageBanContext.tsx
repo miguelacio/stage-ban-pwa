@@ -49,8 +49,15 @@ interface StageBanContextType {
   counterpickStages: Stage[];
   dsrBlockedStageIds: string[];
 
+  // Character selection state
+  p1Character: string;
+  p2Character: string;
+  activeCharPicker: PlayerId | null;
+  charStep: 1 | 2;
+
   // Actions
   selectRpsWinner: (winner: PlayerId, chooseFirstBanner: PlayerId) => void;
+  selectCharacter: (charName: string) => void;
   toggleBanStage: (stageId: string) => void;
   confirmBans: () => void;
   selectPickStage: (stageId: string) => void;
@@ -90,11 +97,16 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [p2Score, setP2Score] = useState<number>(0);
   const [history, setHistory] = useState<GameResult[]>([]);
 
-  // Striking state
+  // Striking & Character state
   const [rpsWinner, setRpsWinner] = useState<PlayerId | null>(null);
   const [firstBanner, setFirstBanner] = useState<PlayerId | null>(null);
-  const [strikingStepIndex, setStrikingStepIndex] = useState<number>(0); // 0: 1 ban, 1: 2 bans, 2: 1 ban
+  const [strikingStepIndex, setStrikingStepIndex] = useState<number>(0);
   
+  const [p1Character, setP1Character] = useState<string>('');
+  const [p2Character, setP2Character] = useState<string>('');
+  const [activeCharPicker, setActiveCharPicker] = useState<PlayerId | null>(null);
+  const [charStep, setCharStep] = useState<1 | 2>(1);
+
   const [bannedStageIds, setBannedStageIds] = useState<string[]>([]);
   const [currentTurnBans, setCurrentTurnBans] = useState<string[]>([]);
   const [p1BansThisGame, setP1BansThisGame] = useState<string[]>([]);
@@ -121,12 +133,17 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         p1BansThisGame,
         p2BansThisGame,
         pickedStageId,
+        p1Character,
+        p2Character,
+        activeCharPicker,
+        charStep,
       }
     ]);
   }, [
     phase, currentGame, p1Score, p2Score, history, rpsWinner, 
     firstBanner, strikingStepIndex, bannedStageIds, currentTurnBans, 
-    p1BansThisGame, p2BansThisGame, pickedStageId
+    p1BansThisGame, p2BansThisGame, pickedStageId, p1Character,
+    p2Character, activeCharPicker, charStep
   ]);
 
   // Derived active stages based on ruleset
@@ -154,10 +171,8 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const picker = lastGame.winner === 'P1' ? 'P2' : 'P1';
 
     if (ruleset.dsr === 'full') {
-      // Picker cannot pick ANY stage they won on in this set
       return history.filter(g => g.winner === picker).map(g => g.stageId);
     } else if (ruleset.dsr === 'modified') {
-      // Picker cannot pick the MOST RECENT stage they won on
       const winsByPicker = history.filter(g => g.winner === picker);
       if (winsByPicker.length > 0) {
         return [winsByPicker[winsByPicker.length - 1].stageId];
@@ -171,12 +186,10 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (phase === 'STARTER_BAN') {
       if (!firstBanner) return 'P1';
       const secondBanner: PlayerId = firstBanner === 'P1' ? 'P2' : 'P1';
-      // Pattern: 0 -> First, 1 -> Second, 2 -> First
       return strikingStepIndex % 2 === 0 ? firstBanner : secondBanner;
     }
     if (phase === 'COUNTERPICK_BAN') {
       if (history.length === 0) return 'P1';
-      // Winner of previous game bans
       return history[history.length - 1].winner;
     }
     return null;
@@ -185,12 +198,10 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const activePicker = useMemo<PlayerId | null>(() => {
     if (phase === 'STARTER_PICK') {
       if (!firstBanner) return 'P1';
-      // First banner picks from remaining
       return firstBanner;
     }
     if (phase === 'COUNTERPICK_PICK') {
       if (history.length === 0) return 'P2';
-      // Loser of previous game picks
       return history[history.length - 1].winner === 'P1' ? 'P2' : 'P1';
     }
     return null;
@@ -199,7 +210,6 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Ban turn counts
   const bansRequiredCurrentTurn = useMemo(() => {
     if (phase === 'STARTER_BAN') {
-      // Game 1 striking: 1-2-1 pattern
       if (strikingStepIndex === 0) return 1;
       if (strikingStepIndex === 1) return 2;
       if (strikingStepIndex === 2) return 1;
@@ -228,7 +238,6 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const setRuleset = useCallback((r: Ruleset) => {
     setRulesetState(r);
-    // Reset set state when ruleset changes
     setPhase('RPS');
     setCurrentGame(1);
     setP1Score(0);
@@ -237,29 +246,75 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setBannedStageIds([]);
     setCurrentTurnBans([]);
     setPickedStageId(null);
+    setP1Character('');
+    setP2Character('');
   }, []);
 
   const selectRpsWinner = useCallback((winner: PlayerId, chooseFirstBanner: PlayerId) => {
     saveSnapshot();
     setRpsWinner(winner);
     setFirstBanner(chooseFirstBanner);
-    setPhase('STARTER_BAN');
+    
+    // Game 1 Character Selection: RPS Loser picks character first!
+    const rpsLoser: PlayerId = winner === 'P1' ? 'P2' : 'P1';
+    setActiveCharPicker(rpsLoser);
+    setCharStep(1);
+    setPhase('CHARACTER_SELECT');
+
     setStrikingStepIndex(0);
     setBannedStageIds([]);
     setCurrentTurnBans([]);
     sound.playTurnChange(settings.soundEnabled);
   }, [saveSnapshot, settings.soundEnabled]);
 
+  const selectCharacter = useCallback((charName: string) => {
+    if (!activeCharPicker) return;
+    saveSnapshot();
+
+    if (activeCharPicker === 'P1') {
+      setP1Character(charName);
+    } else {
+      setP2Character(charName);
+    }
+
+    sound.playPick(settings.soundEnabled);
+
+    if (currentGame === 1) {
+      if (charStep === 1) {
+        const rpsWinnerPlayer: PlayerId = rpsWinner || (activeCharPicker === 'P1' ? 'P2' : 'P1');
+        setActiveCharPicker(rpsWinnerPlayer);
+        setCharStep(2);
+      } else {
+        setActiveCharPicker(null);
+        setPhase('STARTER_BAN');
+        setStrikingStepIndex(0);
+        sound.playTurnChange(settings.soundEnabled);
+      }
+    } else {
+      // Game 2+: Step 1 = Game Winner decided character -> Step 2 = Game Loser decides character -> COUNTERPICK_BAN
+      const lastGame = history[history.length - 1];
+      const lastWinner = lastGame ? lastGame.winner : 'P1';
+      const lastLoser: PlayerId = lastWinner === 'P1' ? 'P2' : 'P1';
+
+      if (charStep === 1) {
+        setActiveCharPicker(lastLoser);
+        setCharStep(2);
+      } else {
+        setActiveCharPicker(null);
+        setPhase('COUNTERPICK_BAN'); // Proceed to stage counterpicking after character selection!
+        sound.playTurnChange(settings.soundEnabled);
+      }
+    }
+  }, [activeCharPicker, charStep, currentGame, rpsWinner, history, saveSnapshot, settings.soundEnabled]);
+
   const toggleBanStage = useCallback((stageId: string) => {
     if (phase !== 'STARTER_BAN' && phase !== 'COUNTERPICK_BAN') return;
 
     if (currentTurnBans.includes(stageId)) {
-      // Unban
       setCurrentTurnBans(prev => prev.filter(id => id !== stageId));
       setBannedStageIds(prev => prev.filter(id => id !== stageId));
       sound.playUndo(settings.soundEnabled);
     } else {
-      // Check if limit reached
       if (currentTurnBans.length >= bansRequiredCurrentTurn) return;
 
       saveSnapshot();
@@ -282,19 +337,15 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     if (phase === 'STARTER_BAN') {
       if (strikingStepIndex === 0) {
-        // Step 1: Winner of RPS banned 1 stage. Next: Opponent bans 2 stages
         setStrikingStepIndex(1);
         setCurrentTurnBans([]);
         sound.playTurnChange(settings.soundEnabled);
       } else {
-        // Step 2: Opponent banned 2 stages. 2 starter stages remain!
-        // Step 3: First player (RPS winner) picks the starting stage from the 2 remaining options
         setPhase('STARTER_PICK');
         setCurrentTurnBans([]);
         sound.playTurnChange(settings.soundEnabled);
       }
     } else if (phase === 'COUNTERPICK_BAN') {
-      // Counterpick bans done! Loser picks next stage
       setPhase('COUNTERPICK_PICK');
       setCurrentTurnBans([]);
       sound.playTurnChange(settings.soundEnabled);
@@ -326,6 +377,8 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       p2ScoreAfter: newP2Score,
       p1Bans: p1BansThisGame,
       p2Bans: p2BansThisGame,
+      p1Character: p1Character || 'N/A',
+      p2Character: p2Character || 'N/A',
     };
 
     const newHistory = [...history, gameRecord];
@@ -347,9 +400,12 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // fallback
       }
     } else {
-      // Setup Game 2+ Counterpick Phase
+      // Setup Game 2+ Character Selection BEFORE Stage Striking!
       setCurrentGame(prev => prev + 1);
-      setPhase('COUNTERPICK_BAN');
+      setActiveCharPicker(winner); // Winner of previous game declares character first!
+      setCharStep(1);
+      setPhase('CHARACTER_SELECT');
+
       setBannedStageIds([]);
       setCurrentTurnBans([]);
       setP1BansThisGame([]);
@@ -357,7 +413,7 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setPickedStageId(null);
       sound.playTurnChange(settings.soundEnabled);
     }
-  }, [pickedStageId, saveSnapshot, currentGame, p1Score, p2Score, p1BansThisGame, p2BansThisGame, history, settings, sound]);
+  }, [pickedStageId, saveSnapshot, currentGame, p1Score, p2Score, p1BansThisGame, p2BansThisGame, p1Character, p2Character, history, settings, sound]);
 
   const undoLastAction = useCallback(() => {
     if (historySnapshotStack.length === 0) return;
@@ -377,6 +433,10 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setP1BansThisGame(lastState.p1BansThisGame);
     setP2BansThisGame(lastState.p2BansThisGame);
     setPickedStageId(lastState.pickedStageId);
+    setP1Character(lastState.p1Character || '');
+    setP2Character(lastState.p2Character || '');
+    setActiveCharPicker(lastState.activeCharPicker || null);
+    setCharStep(lastState.charStep || 1);
 
     sound.playUndo(settings.soundEnabled);
   }, [historySnapshotStack, settings.soundEnabled]);
@@ -396,6 +456,10 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setP1BansThisGame([]);
     setP2BansThisGame([]);
     setPickedStageId(null);
+    setP1Character('');
+    setP2Character('');
+    setActiveCharPicker(null);
+    setCharStep(1);
     sound.playUndo(settings.soundEnabled);
   }, [settings.soundEnabled]);
 
@@ -427,7 +491,12 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         starterStages,
         counterpickStages,
         dsrBlockedStageIds,
+        p1Character,
+        p2Character,
+        activeCharPicker,
+        charStep,
         selectRpsWinner,
+        selectCharacter,
         toggleBanStage,
         confirmBans,
         selectPickStage,

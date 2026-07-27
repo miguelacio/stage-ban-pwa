@@ -40,6 +40,7 @@ export interface Ruleset {
 
 export type AppPhase = 
   | 'RPS'
+  | 'CHARACTER_SELECT'
   | 'STARTER_BAN'
   | 'STARTER_PICK'
   | 'PLAYING'
@@ -56,6 +57,8 @@ export interface GameResult {
   p2ScoreAfter: number;
   p1Bans: string[];
   p2Bans: string[];
+  p1Character?: string;
+  p2Character?: string;
 }
 
 import type { Language } from '../utils/i18n';
