@@ -13,6 +13,8 @@ export const WinnerModal: React.FC = () => {
     setWinner,
     p1Score,
     p2Score,
+    p1Character,
+    p2Character,
     history,
     resetSet,
     t
@@ -44,14 +46,25 @@ export const WinnerModal: React.FC = () => {
           {/* History Breakdown */}
           <div style={{ background: '#0b0f19', borderRadius: '12px', padding: '12px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
             <div style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>{t.historyModalTitle}</div>
-            {history.map(g => (
-              <div key={g.gameNumber} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <span>{t.gameLabel(g.gameNumber)}: <strong>{g.stageName}</strong></span>
-                <span style={{ fontWeight: 700, color: g.winner === 'P1' ? 'var(--color-p1)' : 'var(--color-p2)' }}>
-                  {g.winner === 'P1' ? settings.p1Name : settings.p2Name}
-                </span>
-              </div>
-            ))}
+            {history.map(g => {
+              const winnerChar = g.winner === 'P1' ? g.p1Character : g.p2Character;
+
+              return (
+                <div key={g.gameNumber} style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                    <span>{t.gameLabel(g.gameNumber)}: <strong>{g.stageName}</strong></span>
+                    <span style={{ fontWeight: 700, color: g.winner === 'P1' ? 'var(--color-p1)' : 'var(--color-p2)' }}>
+                      {g.winner === 'P1' ? settings.p1Name : settings.p2Name} {winnerChar && winnerChar !== 'N/A' ? `(${winnerChar})` : ''}
+                    </span>
+                  </div>
+                  {(g.p1Character || g.p2Character) && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      Matchup: <span style={{ color: 'var(--color-p1)', fontWeight: 600 }}>{g.p1Character || 'N/A'}</span> vs <span style={{ color: 'var(--color-p2)', fontWeight: 600 }}>{g.p2Character || 'N/A'}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <button className="btn-primary btn-gold" onClick={resetSet}>
@@ -82,8 +95,32 @@ export const WinnerModal: React.FC = () => {
             <img 
               src={currentStageObj.image} 
               alt={currentStageObj.name} 
-              style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '12px', marginBottom: '16px', border: '1px solid var(--border-card)' }}
+              style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '12px', marginBottom: '12px', border: '1px solid var(--border-card)' }}
             />
+          )}
+
+          {/* Current Matchup Banner */}
+          {(p1Character || p2Character) && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              marginBottom: '12px',
+              padding: '8px 12px',
+              background: 'rgba(255, 255, 255, 0.04)',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              border: '1px solid var(--border-card)'
+            }}>
+              <span style={{ color: 'var(--color-p1)', fontWeight: 700 }}>
+                {settings.p1Name} ({p1Character || 'N/A'})
+              </span>
+              <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>VS</span>
+              <span style={{ color: 'var(--color-p2)', fontWeight: 700 }}>
+                {settings.p2Name} ({p2Character || 'N/A'})
+              </span>
+            </div>
           )}
 
           <div style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '10px' }}>{t.winnerModalSubtitle(currentStageObj?.name || '')}</div>
@@ -92,16 +129,18 @@ export const WinnerModal: React.FC = () => {
             <button
               className="btn-primary btn-p1"
               onClick={() => confirmGameWinner('P1')}
-              style={{ flex: 1, padding: '16px' }}
+              style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}
             >
-              {settings.p1Name}
+              <span style={{ fontWeight: 800 }}>{settings.p1Name}</span>
+              {p1Character && <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p1Character})</span>}
             </button>
             <button
               className="btn-primary btn-p2"
               onClick={() => confirmGameWinner('P2')}
-              style={{ flex: 1, padding: '16px' }}
+              style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}
             >
-              {settings.p2Name}
+              <span style={{ fontWeight: 800 }}>{settings.p2Name}</span>
+              {p2Character && <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p2Character})</span>}
             </button>
           </div>
         </div>
