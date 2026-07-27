@@ -4,7 +4,7 @@ import type { PlayerId } from '../types/smash';
 import { Dices, ArrowRight } from 'lucide-react';
 
 export const RpsModal: React.FC = () => {
-  const { phase, settings, selectRpsWinner } = useStageBan();
+  const { phase, settings, selectRpsWinner, t } = useStageBan();
   const [selectedWinner, setSelectedWinner] = useState<PlayerId | null>(null);
   const [firstBanner, setFirstBanner] = useState<PlayerId | null>(null);
 
@@ -22,14 +22,14 @@ export const RpsModal: React.FC = () => {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Dices size={24} color="#f59e0b" />
-            <h3 className="modal-title">Game 1: RPS Decision</h3>
+            <h3 className="modal-title">{t.rpsModalTitle}</h3>
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
             <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px', fontWeight: 600 }}>
-              1. Who won Rock-Paper-Scissors?
+              {t.whoWonRps}
             </label>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
@@ -58,7 +58,7 @@ export const RpsModal: React.FC = () => {
           {selectedWinner && (
             <div>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px', fontWeight: 600 }}>
-                2. Who bans FIRST? (Striking Pattern: 1 - 2 - 1)
+                {t.whoBansFirst}
               </label>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
@@ -66,14 +66,14 @@ export const RpsModal: React.FC = () => {
                   onClick={() => setFirstBanner('P1')}
                   style={{ flex: 1 }}
                 >
-                  {settings.p1Name} Bans 1st
+                  {settings.p1Name}
                 </button>
                 <button
                   className={`btn-secondary ${firstBanner === 'P2' ? 'btn-p2' : ''}`}
                   onClick={() => setFirstBanner('P2')}
                   style={{ flex: 1 }}
                 >
-                  {settings.p2Name} Bans 1st
+                  {settings.p2Name}
                 </button>
               </div>
             </div>
@@ -85,7 +85,7 @@ export const RpsModal: React.FC = () => {
             onClick={handleConfirm}
             style={{ marginTop: '8px' }}
           >
-            <span>Start Stage Striking</span>
+            <span>{t.startStrikingBtn}</span>
             <ArrowRight size={18} />
           </button>
         </div>

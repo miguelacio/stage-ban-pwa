@@ -58,6 +58,8 @@ export interface GameResult {
   p2Bans: string[];
 }
 
+import type { Language } from '../utils/i18n';
+
 export interface MatchSettings {
   p1Name: string;
   p2Name: string;
@@ -65,4 +67,5 @@ export interface MatchSettings {
   p2Color: string;
   bestOf: 3 | 5;
   soundEnabled: boolean;
+  language: Language;
 }

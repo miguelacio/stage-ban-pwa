@@ -8,7 +8,7 @@ interface HistoryModalProps {
 }
 
 export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose }) => {
-  const { history, settings } = useStageBan();
+  const { history, settings, t } = useStageBan();
 
   if (!isOpen) return null;
 
@@ -18,7 +18,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose }) =
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <History size={22} color="#8b5cf6" />
-            <h3 className="modal-title">Set Match History</h3>
+            <h3 className="modal-title">{t.historyModalTitle}</h3>
           </div>
           <button className="icon-btn" onClick={onClose}>
             <X size={20} />
@@ -27,7 +27,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose }) =
 
         {history.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '30px 10px', color: 'var(--text-muted)' }}>
-            No games played in this set yet.
+            {t.noGamesPlayed}
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -51,10 +51,10 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose }) =
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <MapPin size={16} color="#f59e0b" />
-                      Game {game.gameNumber}: {game.stageName}
+                      {t.gameLabel(game.gameNumber)}: {game.stageName}
                     </div>
                     <div style={{ fontSize: '0.8rem', fontWeight: 800, color: isP1Win ? 'var(--color-p1)' : 'var(--color-p2)' }}>
-                      {winnerName} Won ({game.p1ScoreAfter}-{game.p2ScoreAfter})
+                      {winnerName} ({game.p1ScoreAfter}-{game.p2ScoreAfter})
                     </div>
                   </div>
                 </div>

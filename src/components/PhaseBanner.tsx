@@ -11,7 +11,8 @@ export const PhaseBanner: React.FC = () => {
     bansRequiredCurrentTurn, 
     bansRemainingCurrentTurn,
     settings,
-    setWinner
+    setWinner,
+    t
   } = useStageBan();
 
   if (phase === 'RPS') {
@@ -20,12 +21,12 @@ export const PhaseBanner: React.FC = () => {
         <div className="phase-header">
           <div className="phase-title">
             <Swords size={20} color="#f59e0b" />
-            <span>Game 1: Starter Striking</span>
+            <span>{t.game1Title}</span>
           </div>
-          <span className="turn-pill pick">RPS Phase</span>
+          <span className="turn-pill pick">{t.rpsPhasePill}</span>
         </div>
         <div className="phase-subtitle">
-          Play Rock-Paper-Scissors to determine who bans first.
+          {t.rpsPhaseSubtitle}
         </div>
       </div>
     );
@@ -38,12 +39,12 @@ export const PhaseBanner: React.FC = () => {
         <div className="phase-header">
           <div className="phase-title">
             <Trophy size={22} color="#f59e0b" />
-            <span>SET COMPLETE!</span>
+            <span>{t.setCompleteTitle}</span>
           </div>
-          <span className="turn-pill pick">VICTORY</span>
+          <span className="turn-pill pick">{t.setCompletePill}</span>
         </div>
         <div className="phase-subtitle" style={{ color: '#f8fafc', fontWeight: 700 }}>
-          {winnerName} wins the set!
+          {t.setCompleteSubtitle(winnerName)}
         </div>
       </div>
     );
@@ -55,12 +56,12 @@ export const PhaseBanner: React.FC = () => {
         <div className="phase-header">
           <div className="phase-title">
             <PlayCircle size={20} color="#10b981" />
-            <span>Game {currentGame} In Progress</span>
+            <span>{t.playingTitle(currentGame)}</span>
           </div>
-          <span className="turn-pill pick">PLAYING</span>
+          <span className="turn-pill pick">{t.playingPill}</span>
         </div>
         <div className="phase-subtitle">
-          Play your game on the selected stage, then record who won below.
+          {t.playingSubtitle}
         </div>
       </div>
     );
@@ -77,12 +78,18 @@ export const PhaseBanner: React.FC = () => {
         <div className="phase-header">
           <div className="phase-title">
             <Ban size={20} color={isP1 ? '#ef4444' : '#3b82f6'} />
-            <span>{bannerName}'s Turn to Ban</span>
+            <span>{t.turnToBanTitle(bannerName)}</span>
           </div>
-          <span className={`turn-pill ${pillClass}`}>{activeBanner} BAN</span>
+          <span className={`turn-pill ${pillClass}`}>{t.turnToBanPill(activeBanner || 'P1')}</span>
         </div>
         <div className="phase-subtitle">
-          Tap <strong>{bansRemainingCurrentTurn}</strong> more stage{bansRemainingCurrentTurn === 1 ? '' : 's'} to ban ({bansRequiredCurrentTurn} total this turn).
+          {phase === 'STARTER_BAN' ? (
+            bansRequiredCurrentTurn === 1 
+              ? t.starterStep1BanSubtitle(bannerName)
+              : t.starterStep2BanSubtitle(bannerName)
+          ) : (
+            t.genericBanSubtitle(bansRemainingCurrentTurn, bansRequiredCurrentTurn)
+          )}
         </div>
       </div>
     );
@@ -99,12 +106,15 @@ export const PhaseBanner: React.FC = () => {
         <div className="phase-header">
           <div className="phase-title">
             <CheckCircle2 size={20} color="#f59e0b" />
-            <span>{pickerName}'s Turn to Pick</span>
+            <span>{t.turnToPickTitle(pickerName)}</span>
           </div>
-          <span className={`turn-pill ${pillClass}`}>{activePicker} PICK</span>
+          <span className={`turn-pill ${pillClass}`}>{t.turnToPickPill(activePicker || 'P1')}</span>
         </div>
         <div className="phase-subtitle">
-          Select 1 stage from the remaining legal stages to play Game {currentGame}.
+          {phase === 'STARTER_PICK'
+            ? t.starterFinalPickSubtitle(pickerName)
+            : t.genericPickSubtitle(currentGame)
+          }
         </div>
       </div>
     );

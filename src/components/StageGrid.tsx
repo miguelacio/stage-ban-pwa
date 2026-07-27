@@ -12,6 +12,7 @@ export const StageGrid: React.FC = () => {
     dsrBlockedStageIds,
     toggleBanStage,
     selectPickStage,
+    t,
   } = useStageBan();
 
   // If Game 1 Starter striking, only display starters. In Counterpick phase, show all active legal stages.
@@ -33,10 +34,10 @@ export const StageGrid: React.FC = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <div className="stage-grid-header">
         <div className="stage-grid-title">
-          {phase === 'STARTER_BAN' || phase === 'STARTER_PICK' ? 'Starter Stages' : 'Legal Stages'}
+          {phase === 'STARTER_BAN' || phase === 'STARTER_PICK' ? t.starterStagesTitle : t.legalStagesTitle}
         </div>
         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          {displayStages.length} Stages Available
+          {t.stagesAvailable(displayStages.length)}
         </div>
       </div>
 

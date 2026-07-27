@@ -11,6 +11,7 @@ import { DEFAULT_RULESETS } from '../data/rulesets';
 import { STAGES } from '../data/stages';
 import { sound } from '../utils/sound';
 import confetti from 'canvas-confetti';
+import { translations, type Translations } from '../utils/i18n';
 
 interface StageBanContextType {
   // Settings & Ruleset
@@ -18,6 +19,8 @@ interface StageBanContextType {
   setRuleset: (r: Ruleset) => void;
   settings: MatchSettings;
   updateSettings: (s: Partial<MatchSettings>) => void;
+  t: Translations;
+  toggleLanguage: () => void;
   
   // Game & Set State
   phase: AppPhase;
@@ -68,7 +71,17 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     p2Color: '#3b82f6',
     bestOf: 3,
     soundEnabled: true,
+    language: 'en',
   });
+
+  const t = useMemo(() => translations[settings.language || 'en'], [settings.language]);
+
+  const toggleLanguage = useCallback(() => {
+    setSettings(prev => ({
+      ...prev,
+      language: prev.language === 'en' ? 'es' : 'en'
+    }));
+  }, []);
 
   // Match state
   const [phase, setPhase] = useState<AppPhase>('RPS');
@@ -269,31 +282,16 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     if (phase === 'STARTER_BAN') {
       if (strikingStepIndex === 0) {
-        // Next is 2 bans by second banner
+        // Step 1: Winner of RPS banned 1 stage. Next: Opponent bans 2 stages
         setStrikingStepIndex(1);
         setCurrentTurnBans([]);
         sound.playTurnChange(settings.soundEnabled);
-      } else if (strikingStepIndex === 1) {
-        // Next is 1 ban by first banner (or remaining stage is automatically picked)
-        const remainingStarters = starterStages.filter(s => !bannedStageIds.includes(s.id));
-        if (remainingStarters.length === 1) {
-          // Only 1 left! Auto move to pick/playing
-          setPickedStageId(remainingStarters[0].id);
-          setPhase('PLAYING');
-          sound.playPick(settings.soundEnabled);
-        } else {
-          setStrikingStepIndex(2);
-          setCurrentTurnBans([]);
-          sound.playTurnChange(settings.soundEnabled);
-        }
       } else {
-        // Striking finished!
-        const remainingStarters = starterStages.filter(s => !bannedStageIds.includes(s.id));
-        if (remainingStarters.length > 0) {
-          setPickedStageId(remainingStarters[0].id);
-        }
-        setPhase('PLAYING');
-        sound.playPick(settings.soundEnabled);
+        // Step 2: Opponent banned 2 stages. 2 starter stages remain!
+        // Step 3: First player (RPS winner) picks the starting stage from the 2 remaining options
+        setPhase('STARTER_PICK');
+        setCurrentTurnBans([]);
+        sound.playTurnChange(settings.soundEnabled);
       }
     } else if (phase === 'COUNTERPICK_BAN') {
       // Counterpick bans done! Loser picks next stage
@@ -408,6 +406,8 @@ export const StageBanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setRuleset,
         settings,
         updateSettings,
+        t,
+        toggleLanguage,
         phase,
         currentGame,
         p1Score,

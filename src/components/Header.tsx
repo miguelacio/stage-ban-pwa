@@ -15,7 +15,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
     p2Score, 
     ruleset, 
     resetSet,
-    undoLastAction
+    undoLastAction,
+    t,
+    toggleLanguage
   } = useStageBan();
 
   const [isEditingNames, setIsEditingNames] = useState(false);
@@ -31,14 +33,29 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
     setIsEditingNames(false);
   };
 
+  const handleResetClick = () => {
+    if (window.confirm(t.confirmResetMsg)) {
+      resetSet();
+    }
+  };
+
   return (
     <header className="app-header">
       <div className="brand-bar">
         <div className="brand-title">
           <Shield size={20} color="#8b5cf6" />
-          <span>SMASH BAN PWA</span>
+          <span>{t.appTitle}</span>
         </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+          <button 
+            className="icon-btn" 
+            onClick={toggleLanguage}
+            title={settings.language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
+            style={{ fontSize: '0.75rem', fontWeight: 700, padding: '4px 8px', borderRadius: '6px', background: 'rgba(139, 92, 246, 0.2)', border: '1px solid rgba(139, 92, 246, 0.4)', color: '#fff' }}
+          >
+            🌐 {settings.language.toUpperCase()}
+          </button>
+
           <button 
             className="icon-btn" 
             onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
@@ -47,15 +64,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
             {settings.soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} color="#94a3b8" />}
           </button>
 
-          <button className="icon-btn" onClick={onOpenHistory} title="Set History">
+          <button className="icon-btn" onClick={onOpenHistory} title={t.historyBtn}>
             <History size={18} />
           </button>
 
-          <button className="icon-btn" onClick={onOpenRuleset} title="Ruleset & Stages">
+          <button className="icon-btn" onClick={onOpenRuleset} title={t.rulesetBtn}>
             <Settings size={18} />
           </button>
 
-          <button className="icon-btn" onClick={undoLastAction} title="Undo Action">
+          <button className="icon-btn" onClick={undoLastAction} title={t.undoBtn}>
             <RotateCcw size={18} />
           </button>
         </div>
@@ -81,12 +98,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-        <span>Ruleset: <strong>{ruleset.name}</strong></span>
+        <span>{t.rulesetBtn}: <strong>{ruleset.name}</strong></span>
         <button 
-          onClick={resetSet} 
+          onClick={handleResetClick} 
           style={{ background: 'none', border: 'none', color: '#ef4444', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}
         >
-          Reset Match
+          {t.resetBtn}
         </button>
       </div>
 

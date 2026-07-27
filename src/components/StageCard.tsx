@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Stage } from '../types/smash';
+import { useStageBan } from '../context/StageBanContext';
 import { Ban, Check, Lock, Layers } from 'lucide-react';
 
 interface StageCardProps {
@@ -19,6 +20,8 @@ export const StageCard: React.FC<StageCardProps> = ({
   isSelectable,
   onClick,
 }) => {
+  const { t } = useStageBan();
+
   let cardClass = 'stage-card';
   if (isBanned) cardClass += ' banned';
   if (isPicked) cardClass += ' picked';
@@ -45,7 +48,7 @@ export const StageCard: React.FC<StageCardProps> = ({
         {isBanned && (
           <div className="stage-ban-overlay">
             <Ban size={36} color="#ef4444" strokeWidth={3} />
-            <span style={{ marginTop: '4px', textTransform: 'uppercase' }}>BANNED</span>
+            <span style={{ marginTop: '4px', textTransform: 'uppercase' }}>{t.badgeBanned}</span>
           </div>
         )}
 
@@ -53,7 +56,7 @@ export const StageCard: React.FC<StageCardProps> = ({
         {isPicked && (
           <div className="stage-pick-overlay">
             <Check size={40} color="#f59e0b" strokeWidth={3} />
-            <span style={{ marginTop: '4px', textTransform: 'uppercase' }}>SELECTED</span>
+            <span style={{ marginTop: '4px', textTransform: 'uppercase' }}>{t.badgePicked}</span>
           </div>
         )}
 
@@ -61,7 +64,7 @@ export const StageCard: React.FC<StageCardProps> = ({
         {isDsrBlocked && (
           <div className="stage-dsr-overlay">
             <Lock size={28} color="#8b5cf6" style={{ marginBottom: '4px' }} />
-            <span>DSR LOCKED</span>
+            <span>{t.badgeDsrBlocked}</span>
           </div>
         )}
       </div>
@@ -70,7 +73,7 @@ export const StageCard: React.FC<StageCardProps> = ({
         <div className="stage-name">{stage.name}</div>
         <div className="stage-badges">
           <span className={`badge ${stage.category}`}>
-            {stage.category === 'starter' ? 'Starter' : 'Counterpick'}
+            {stage.category === 'starter' ? t.startersLabel : t.counterpicksLabel}
           </span>
           <span className="badge" style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
             <Layers size={10} />

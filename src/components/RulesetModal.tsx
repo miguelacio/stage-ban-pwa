@@ -11,8 +11,8 @@ interface RulesetModalProps {
 }
 
 export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) => {
-  const { ruleset, setRuleset } = useStageBan();
-  const [activeTab, setActiveTab] = useState<'presets' | 'custom'>('presets');
+  const { ruleset, setRuleset, settings, updateSettings, t } = useStageBan();
+  const [activeTab, setActiveTab] = useState<'presets' | 'custom' | 'settings'>('presets');
 
   // Custom configuration state
   const [customStarters, setCustomStarters] = useState<string[]>(ruleset.starters);
@@ -58,31 +58,38 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '520px' }}>
         <div className="modal-header">
-          <h3 className="modal-title">Tournament Ruleset &amp; Stages</h3>
+          <h3 className="modal-title">{t.settingsTitle}</h3>
           <button className="icon-btn" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '8px', background: '#0b0f19', padding: '4px', borderRadius: '10px' }}>
+        <div style={{ display: 'flex', gap: '6px', background: '#0b0f19', padding: '4px', borderRadius: '10px' }}>
           <button 
             className={`btn-secondary ${activeTab === 'presets' ? 'btn-primary' : ''}`}
             onClick={() => setActiveTab('presets')}
-            style={{ flex: 1, padding: '8px' }}
+            style={{ flex: 1, padding: '8px', fontSize: '0.8rem' }}
           >
             Presets
           </button>
           <button 
             className={`btn-secondary ${activeTab === 'custom' ? 'btn-primary' : ''}`}
             onClick={() => setActiveTab('custom')}
-            style={{ flex: 1, padding: '8px' }}
+            style={{ flex: 1, padding: '8px', fontSize: '0.8rem' }}
           >
-            Custom Ruleset
+            Custom
+          </button>
+          <button 
+            className={`btn-secondary ${activeTab === 'settings' ? 'btn-primary' : ''}`}
+            onClick={() => setActiveTab('settings')}
+            style={{ flex: 1, padding: '8px', fontSize: '0.8rem' }}
+          >
+            Settings
           </button>
         </div>
 
-        {activeTab === 'presets' ? (
+        {activeTab === 'presets' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {DEFAULT_RULESETS.map(r => {
               const isSelected = ruleset.id === r.id;
@@ -110,11 +117,13 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
               );
             })}
           </div>
-        ) : (
+        )}
+
+        {activeTab === 'custom' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                Counterpick Bans Count
+                {t.cpBansLabel(customCpBans)}
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {[1, 2, 3, 4].map(num => (
@@ -124,7 +133,7 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
                     onClick={() => setCustomCpBans(num)}
                     style={{ flex: 1 }}
                   >
-                    {num} Ban{num > 1 ? 's' : ''}
+                    {num}
                   </button>
                 ))}
               </div>
@@ -132,7 +141,7 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
 
             <div>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                {"Dave's Stupid Rule (DSR) Mode"}
+                {t.dsrRuleLabel}
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {(['modified', 'full', 'none'] as DsrType[]).map(type => (
@@ -142,7 +151,7 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
                     onClick={() => setCustomDsr(type)}
                     style={{ flex: 1, textTransform: 'capitalize', fontSize: '0.8rem' }}
                   >
-                    {type} DSR
+                    {type}
                   </button>
                 ))}
               </div>
@@ -150,9 +159,9 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
 
             <div>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
-                {"Stage Legal List & Classifications (Tap to toggle Starter / CP / Off)"}
+                Stage Classification
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
                 {STAGES.map(s => {
                   const isStarter = customStarters.includes(s.id);
                   const isCP = customCounterpicks.includes(s.id);
@@ -174,7 +183,7 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
                     >
                       <span style={{ fontWeight: 600 }}>{s.name}</span>
                       <span style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', color: isStarter ? '#60a5fa' : (isCP ? '#fbbf24' : '#64748b') }}>
-                        {isStarter ? 'Starter' : (isCP ? 'CP' : 'Off')}
+                        {isStarter ? t.startersLabel : (isCP ? 'CP' : 'Off')}
                       </span>
                     </div>
                   );
@@ -183,8 +192,56 @@ export const RulesetModal: React.FC<RulesetModalProps> = ({ isOpen, onClose }) =
             </div>
 
             <button className="btn-primary" onClick={handleSaveCustom}>
-              Apply Custom Ruleset
+              {t.saveSettingsBtn}
             </button>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+                {t.languageLabel}
+              </label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  className={`btn-secondary ${settings.language === 'en' ? 'btn-primary' : ''}`}
+                  onClick={() => updateSettings({ language: 'en' })}
+                  style={{ flex: 1, padding: '12px' }}
+                >
+                  {t.english}
+                </button>
+                <button
+                  className={`btn-secondary ${settings.language === 'es' ? 'btn-primary' : ''}`}
+                  onClick={() => updateSettings({ language: 'es' })}
+                  style={{ flex: 1, padding: '12px' }}
+                >
+                  {t.spanish}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+                {t.soundLabel}
+              </label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  className={`btn-secondary ${settings.soundEnabled ? 'btn-primary' : ''}`}
+                  onClick={() => updateSettings({ soundEnabled: true })}
+                  style={{ flex: 1, padding: '12px' }}
+                >
+                  🔊 {t.soundOn}
+                </button>
+                <button
+                  className={`btn-secondary ${!settings.soundEnabled ? 'btn-primary' : ''}`}
+                  onClick={() => updateSettings({ soundEnabled: false })}
+                  style={{ flex: 1, padding: '12px' }}
+                >
+                  🔇 {t.soundOff}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

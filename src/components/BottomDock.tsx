@@ -11,6 +11,7 @@ export const BottomDock: React.FC = () => {
     currentTurnBans,
     confirmBans,
     undoLastAction,
+    t,
   } = useStageBan();
 
   if (phase === 'RPS' || phase === 'PLAYING' || phase === 'SET_COMPLETE') {
@@ -28,7 +29,7 @@ export const BottomDock: React.FC = () => {
       <button 
         className="btn-secondary" 
         onClick={undoLastAction}
-        title="Undo"
+        title={t.undoBtn}
         style={{ padding: '14px' }}
       >
         <RotateCcw size={18} />
@@ -43,8 +44,8 @@ export const BottomDock: React.FC = () => {
           <Ban size={18} />
           <span>
             {canConfirmBans 
-              ? `Confirm ${bansRequiredCurrentTurn} Ban${bansRequiredCurrentTurn > 1 ? 's' : ''}` 
-              : `Select ${bansRemainingCurrentTurn} More Stage${bansRemainingCurrentTurn === 1 ? '' : 's'}`
+              ? (bansRequiredCurrentTurn === 1 ? t.confirmBanSingle : t.confirmBanPlural(bansRequiredCurrentTurn))
+              : t.selectMoreStages(bansRemainingCurrentTurn)
             }
           </span>
         </button>
@@ -53,7 +54,7 @@ export const BottomDock: React.FC = () => {
       {isPickPhase && (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', color: 'var(--text-muted)', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '14px', border: '1px solid var(--border-card)', padding: '0 12px' }}>
           <CheckCircle2 size={16} color="#f59e0b" style={{ marginRight: '6px' }} />
-          Tap any remaining stage card to select
+          {t.tapToSelectHint}
         </div>
       )}
     </div>
