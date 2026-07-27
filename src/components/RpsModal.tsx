@@ -4,7 +4,7 @@ import type { PlayerId } from '../types/smash';
 import { Dices, ArrowRight } from 'lucide-react';
 
 export const RpsModal: React.FC = () => {
-  const { phase, settings, selectRpsWinner, t } = useStageBan();
+  const { phase, settings, selectRpsWinner, t, toggleLanguage } = useStageBan();
   const [selectedWinner, setSelectedWinner] = useState<PlayerId | null>(null);
   const [firstBanner, setFirstBanner] = useState<PlayerId | null>(null);
 
@@ -19,11 +19,19 @@ export const RpsModal: React.FC = () => {
   return (
     <div className="modal-overlay">
       <div className="modal-card">
-        <div className="modal-header">
+        <div className="modal-header" style={{ justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Dices size={24} color="#f59e0b" />
             <h3 className="modal-title">{t.rpsModalTitle}</h3>
           </div>
+          <button 
+            className="icon-btn" 
+            onClick={toggleLanguage}
+            title={settings.language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
+            style={{ fontSize: '0.75rem', fontWeight: 700, padding: '4px 8px', borderRadius: '6px', background: 'rgba(139, 92, 246, 0.2)', border: '1px solid rgba(139, 92, 246, 0.4)', color: '#fff' }}
+          >
+            🌐 {settings.language.toUpperCase()}
+          </button>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
