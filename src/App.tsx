@@ -14,7 +14,7 @@ export const MainApp: React.FC = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   return (
-    <div id="root">
+    <div className="app-shell">
       <Header 
         onOpenRuleset={() => setIsRulesetOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
