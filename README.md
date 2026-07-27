@@ -13,7 +13,7 @@ A sleek, mobile-optimized Progressive Web Application (PWA) designed for competi
   2. **First Ban**: First player bans **1** starter stage.
   3. **Second Bans**: Opponent bans **2** starter stages.
   4. **Final Choice**: First player picks the final starting stage directly from the **2 remaining options**.
-* **Bilingual Support (English 🇺🇸 / Español 🇪🇸)**:
+* **Bilingual Support (English 🇺🇸 / Español 🇲🇽)**:
   * Instant one-click language toggle right in the header bar or settings menu.
 * **Game 2+ Counterpicking & DSR Support**:
   * Winner bans stages (configurable count, e.g. 3 bans).
