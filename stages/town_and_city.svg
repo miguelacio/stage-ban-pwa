@@ -6,13 +6,19 @@
   <line x1="115" y1="150" x2="285" y2="150" stroke="#0000d6" stroke-width="3"/>
   <circle cx="115" cy="150" r="2.5" fill="#854d0e"/>
   <circle cx="285" cy="150" r="2.5" fill="#854d0e"/>
-  <line x1="110" y1="120" x2="155" y2="120" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
-  <line x1="109" y1="120" x2="111" y2="120" stroke="#ef4444" stroke-width="3.5"/>
-  <line x1="154" y1="120" x2="156" y2="120" stroke="#ef4444" stroke-width="3.5"/>
-  <line x1="178" y1="120" x2="222" y2="120" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
-  <line x1="177" y1="120" x2="179" y2="120" stroke="#ef4444" stroke-width="3.5"/>
-  <line x1="221" y1="120" x2="223" y2="120" stroke="#ef4444" stroke-width="3.5"/>
-  <line x1="245" y1="120" x2="290" y2="120" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
-  <line x1="244" y1="120" x2="246" y2="120" stroke="#ef4444" stroke-width="3.5"/>
-  <line x1="289" y1="120" x2="291" y2="120" stroke="#ef4444" stroke-width="3.5"/>
+  
+  <!-- Left Side Platform (Higher at y=110 & Further Left x=92..137) -->
+  <line x1="92" y1="110" x2="137" y2="110" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
+  <line x1="91" y1="110" x2="93" y2="110" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="136" y1="110" x2="138" y2="110" stroke="#ef4444" stroke-width="3.5"/>
+  
+  <!-- Center Platform (y=125 x=178..222) -->
+  <line x1="178" y1="125" x2="222" y2="125" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
+  <line x1="177" y1="125" x2="179" y2="125" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="221" y1="125" x2="223" y2="125" stroke="#ef4444" stroke-width="3.5"/>
+  
+  <!-- Right Side Platform (Higher at y=110 & Further Right x=263..308) -->
+  <line x1="263" y1="110" x2="308" y2="110" stroke="#0000d6" stroke-width="3.5" stroke-linecap="square"/>
+  <line x1="262" y1="110" x2="264" y2="110" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="307" y1="110" x2="309" y2="110" stroke="#ef4444" stroke-width="3.5"/>
 </svg>
