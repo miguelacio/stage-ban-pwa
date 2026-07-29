@@ -2,8 +2,8 @@ import type { Ruleset } from '../types/smash';
 
 export const DEFAULT_RULESETS: Ruleset[] = [
   {
-    id: 'standard_2025',
-    name: 'Standard Major 2025',
+    id: 'standard_2026',
+    name: 'Standard Major 2026+',
     description: '5 Starters (BF, SBF, FD, PS2, HB), 3 Counterpicks (T&C, SV, Kalos). 3 Bans in CP, Modified DSR.',
     starters: ['battlefield', 'small_battlefield', 'pokemon_stadium_2', 'town_and_city', 'smashville'],
     counterpicks: ['hollow_bastion','final_destination', 'kalos'],
