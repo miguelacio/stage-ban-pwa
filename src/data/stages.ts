@@ -10,7 +10,7 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#3b82f6',
     description: 'Classic 3-platform layout with high top platform. Great for vertical combos.',
-    image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/battlefield.svg',
   },
   {
     id: 'small_battlefield',
@@ -21,7 +21,7 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#06b6d4',
     description: '2 platforms at mid height. Favors close-quarters pressure and neutral mixups.',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/small_battlefield.svg',
   },
   {
     id: 'final_destination',
@@ -32,7 +32,7 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#ef4444',
     description: 'No platforms. Pure ground game, favors zoning, projectile heavy fighters, and heavy combos.',
-    image: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/final_destination.svg',
   },
   {
     id: 'pokemon_stadium_2',
@@ -43,7 +43,7 @@ export const STAGES: Stage[] = [
     blastzone: 'large',
     accentColor: '#10b981',
     description: 'Wide main stage with 2 spread-out low platforms. Standard neutral default.',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/pokemon_stadium_2.svg',
   },
   {
     id: 'hollow_bastion',
@@ -54,7 +54,7 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#8b5cf6',
     description: 'Wide main platform with a single central platform. Clean perimeter and blastzones.',
-    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/hollow_bastion.svg',
   },
   {
     id: 'town_and_city',
@@ -65,7 +65,7 @@ export const STAGES: Stage[] = [
     blastzone: 'small',
     accentColor: '#f59e0b',
     description: 'Low ceiling with alternating platform layouts. Early vertical ladder KOs.',
-    image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/town_and_city.svg',
   },
   {
     id: 'smashville',
@@ -76,7 +76,7 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#ec4899',
     description: 'Single platform moving horizontally across the main stage. Great for extension.',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/smashville.svg',
   },
   {
     id: 'kalos',
@@ -87,7 +87,7 @@ export const STAGES: Stage[] = [
     blastzone: 'large',
     accentColor: '#6366f1',
     description: 'Wide stage with platforms hovering near the side ledges. Wall recovery options.',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/kalos.svg',
   },
   {
     id: 'yoshis_story',
@@ -98,7 +98,7 @@ export const STAGES: Stage[] = [
     blastzone: 'small',
     accentColor: '#14b8a6',
     description: 'Sloped ledge sides, tri-plat layout with tight blastzones. High volatility.',
-    image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/yoshis_story.svg',
   },
   {
     id: 'lylat_cruise',
@@ -109,6 +109,6 @@ export const STAGES: Stage[] = [
     blastzone: 'medium',
     accentColor: '#64748b',
     description: '3 platforms on a tilted main stage. Sloped edges test ledge trap execution.',
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80',
+    image: 'stages/lylat_cruise.svg',
   },
 ];
