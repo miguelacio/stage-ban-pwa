@@ -2,6 +2,7 @@ import React from 'react';
 import { useStageBan } from '../context/StageBanContext';
 import { Trophy, Swords, RotateCcw } from 'lucide-react';
 import { STAGES } from '../data/stages';
+import { SSBU_CHARACTERS } from '../data/characters';
 
 export const WinnerModal: React.FC = () => {
   const { 
@@ -23,6 +24,8 @@ export const WinnerModal: React.FC = () => {
   if (phase !== 'PLAYING' && phase !== 'SET_COMPLETE') return null;
 
   const currentStageObj = STAGES.find(s => s.id === pickedStageId);
+  const p1CharObj = SSBU_CHARACTERS.find(c => c.name === p1Character);
+  const p2CharObj = SSBU_CHARACTERS.find(c => c.name === p2Character);
 
   if (phase === 'SET_COMPLETE') {
     const isP1Winner = setWinner === 'P1';
@@ -48,12 +51,14 @@ export const WinnerModal: React.FC = () => {
             <div style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>{t.historyModalTitle}</div>
             {history.map(g => {
               const winnerChar = g.winner === 'P1' ? g.p1Character : g.p2Character;
+              const winnerCharObj = SSBU_CHARACTERS.find(c => c.name === winnerChar);
 
               return (
                 <div key={g.gameNumber} style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                     <span>{t.gameLabel(g.gameNumber)}: <strong>{g.stageName}</strong></span>
-                    <span style={{ fontWeight: 700, color: g.winner === 'P1' ? 'var(--color-p1)' : 'var(--color-p2)' }}>
+                    <span style={{ fontWeight: 700, color: g.winner === 'P1' ? 'var(--color-p1)' : 'var(--color-p2)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      {winnerCharObj?.icon && <img src={winnerCharObj.icon} alt={winnerChar || ''} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />}
                       {g.winner === 'P1' ? settings.p1Name : settings.p2Name} {winnerChar && winnerChar !== 'N/A' ? `(${winnerChar})` : ''}
                     </span>
                   </div>
@@ -113,13 +118,19 @@ export const WinnerModal: React.FC = () => {
               fontSize: '0.85rem',
               border: '1px solid var(--border-card)'
             }}>
-              <span style={{ color: 'var(--color-p1)', fontWeight: 700 }}>
-                {settings.p1Name} ({p1Character || 'N/A'})
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {p1CharObj?.icon && <img src={p1CharObj.icon} alt={p1Character} style={{ width: '22px', height: '22px', objectFit: 'contain' }} />}
+                <span style={{ color: 'var(--color-p1)', fontWeight: 700 }}>
+                  {settings.p1Name} ({p1Character || 'N/A'})
+                </span>
+              </div>
               <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>VS</span>
-              <span style={{ color: 'var(--color-p2)', fontWeight: 700 }}>
-                {settings.p2Name} ({p2Character || 'N/A'})
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ color: 'var(--color-p2)', fontWeight: 700 }}>
+                  {settings.p2Name} ({p2Character || 'N/A'})
+                </span>
+                {p2CharObj?.icon && <img src={p2CharObj.icon} alt={p2Character} style={{ width: '22px', height: '22px', objectFit: 'contain' }} />}
+              </div>
             </div>
           )}
 
@@ -132,7 +143,12 @@ export const WinnerModal: React.FC = () => {
               style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}
             >
               <span style={{ fontWeight: 800 }}>{settings.p1Name}</span>
-              {p1Character && <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p1Character})</span>}
+              {p1Character && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {p1CharObj?.icon && <img src={p1CharObj.icon} alt={p1Character} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />}
+                  <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p1Character})</span>
+                </div>
+              )}
             </button>
             <button
               className="btn-primary btn-p2"
@@ -140,7 +156,12 @@ export const WinnerModal: React.FC = () => {
               style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'center' }}
             >
               <span style={{ fontWeight: 800 }}>{settings.p2Name}</span>
-              {p2Character && <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p2Character})</span>}
+              {p2Character && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 600 }}>({p2Character})</span>
+                  {p2CharObj?.icon && <img src={p2CharObj.icon} alt={p2Character} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />}
+                </div>
+              )}
             </button>
           </div>
         </div>

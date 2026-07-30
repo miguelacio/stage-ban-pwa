@@ -7,6 +7,8 @@ interface HeaderProps {
   onOpenHistory: () => void;
 }
 
+import { SSBU_CHARACTERS } from '../data/characters';
+
 export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) => {
   const { 
     settings, 
@@ -25,6 +27,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
   const [isEditingNames, setIsEditingNames] = useState(false);
   const [tempP1, setTempP1] = useState(settings.p1Name);
   const [tempP2, setTempP2] = useState(settings.p2Name);
+
+  const p1CharObj = SSBU_CHARACTERS.find(c => c.name === p1Character);
+  const p2CharObj = SSBU_CHARACTERS.find(c => c.name === p2Character);
 
   const handleSaveNames = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +90,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
           <div className="player-avatar p1">P1</div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', overflow: 'hidden' }}>
             <div className="player-name" title={settings.p1Name}>{settings.p1Name}</div>
-            {p1Character && <div style={{ fontSize: '0.7rem', color: 'var(--color-p1)', fontWeight: 700 }}>{p1Character}</div>}
+            {p1Character && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {p1CharObj?.icon && <img src={p1CharObj.icon} alt={p1Character} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />}
+                <span style={{ fontSize: '0.7rem', color: 'var(--color-p1)', fontWeight: 700 }}>{p1Character}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -99,7 +109,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRuleset, onOpenHistory }) 
         <div className="player-card p2" onClick={() => setIsEditingNames(true)} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', overflow: 'hidden' }}>
             <div className="player-name" title={settings.p2Name}>{settings.p2Name}</div>
-            {p2Character && <div style={{ fontSize: '0.7rem', color: 'var(--color-p2)', fontWeight: 700 }}>{p2Character}</div>}
+            {p2Character && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--color-p2)', fontWeight: 700 }}>{p2Character}</span>
+                {p2CharObj?.icon && <img src={p2CharObj.icon} alt={p2Character} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />}
+              </div>
+            )}
           </div>
           <div className="player-avatar p2">P2</div>
         </div>

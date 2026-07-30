@@ -125,7 +125,7 @@ export const CharacterSelectModal: React.FC = () => {
         {/* Character Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(105px, 1fr))',
           gap: '8px',
           overflowY: 'auto',
           paddingRight: '4px',
@@ -139,23 +139,36 @@ export const CharacterSelectModal: React.FC = () => {
                 key={char.id}
                 onClick={() => handleSelectChar(char.name)}
                 style={{
-                  padding: '10px 8px',
+                  padding: '10px 6px',
                   borderRadius: '10px',
                   background: isCurrent ? (isP1 ? 'rgba(239, 68, 68, 0.25)' : 'rgba(59, 130, 246, 0.25)') : 'rgba(255, 255, 255, 0.04)',
-                  border: isCurrent ? `1px solid ${isP1 ? 'var(--color-p1)' : 'var(--color-p2)'}` : '1px solid var(--border-card)',
+                  border: isCurrent ? `2px solid ${isP1 ? 'var(--color-p1)' : 'var(--color-p2)'}` : '1px solid var(--border-card)',
+                  boxShadow: isCurrent ? (isP1 ? '0 0 12px rgba(239, 68, 68, 0.4)' : '0 0 12px rgba(59, 130, 246, 0.4)') : 'none',
                   cursor: 'pointer',
                   textAlign: 'center',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: '#f8fafc',
                   transition: 'all 0.15s ease',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  minHeight: '44px'
+                  gap: '6px',
+                  minHeight: '75px'
                 }}
               >
-                {char.name}
+                {char.icon ? (
+                  <img 
+                    src={char.icon} 
+                    alt={char.name} 
+                    style={{ width: '36px', height: '36px', objectFit: 'contain' }}
+                    onError={(e) => {
+                      // fallback if icon fails to load
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                ) : null}
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#f8fafc', lineHeight: 1.1 }}>
+                  {char.name}
+                </span>
               </div>
             );
           })}
