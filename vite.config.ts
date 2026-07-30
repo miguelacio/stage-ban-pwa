@@ -9,7 +9,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'manifest.webmanifest'],
+      includeAssets: ['icon.svg', 'manifest.webmanifest', 'stages/*.svg', 'characters/*.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+      },
       manifest: {
         name: 'Super Smash Bros Ultimate Stage Ban PWA',
         short_name: 'Smash Ban',
